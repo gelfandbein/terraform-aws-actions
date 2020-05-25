@@ -2,10 +2,12 @@
 terraform {
   required_version = ">=0.12.24"
   backend "s3" {
-    bucket         = "github-terraform-actions"
-    key            = "terraform.tfstate"
-    region         = "eu-central-1"
-    dynamodb_table = "aws-locks"
+    bucket = "github-terraform-actions"
+    key    = "terraform.tfstate"
+    region = "eu-central-1"
+    #dynamodb_table = "aws-locks"
+    dynamodb_table = "eu-central-1"
+    lock_table     = "aws-locks"
     encrypt        = true
   }
 }
@@ -30,8 +32,8 @@ module "bootstrap" {
 
 # Build the VPC
 resource "aws_vpc" "vpc" {
-  cidr_block           = "10.1.0.0/16"
-  instance_tenancy     = "default"
+  cidr_block       = "10.1.0.0/16"
+  instance_tenancy = "default"
 
   tags = {
     Name      = "Vpc"
@@ -44,7 +46,7 @@ resource "aws_route_table" "route_table1" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "RouteTable1"
+    Name      = "RouteTable1"
     Terraform = "true"
   }
 }
@@ -54,7 +56,7 @@ resource "aws_route_table" "route_table2" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "RouteTable2"
+    Name      = "RouteTable2"
     Terraform = "true"
   }
 }
